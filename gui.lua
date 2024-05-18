@@ -15,7 +15,7 @@ local Window = Library:CreateWindow({
       Invite = "", 
       RememberJoins = true
    },
-   KeySystem = "Adam"
+   KeySystem = false
 })
 
 local Main = Window:CreateTab("Main")
