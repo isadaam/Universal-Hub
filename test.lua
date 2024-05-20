@@ -1,39 +1,26 @@
--- Enable Secure Mode
-getgenv().SecureMode = true
-
 -- Load Rayfield Library
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/CustomFIeld/main/RayField.lua'))()
-
--- Set Theme
-Rayfield:SetTheme({
-    Background = Color3.fromRGB(24, 24, 24),
-    Glow = Color3.fromRGB(0, 120, 215),
-    Accent = Color3.fromRGB(40, 40, 40),
-    LightContrast = Color3.fromRGB(60, 60, 60),
-    DarkContrast = Color3.fromRGB(20, 20, 20),
-    TextColor = Color3.fromRGB(255, 255, 255)
-})
 
 -- Create Window
 local Window = Rayfield:CreateWindow({
     Name = "Adam Hub",
-    LoadingTitle = "Loading Adam Hub...",
-    LoadingSubtitle = "by Adam",
+    LoadingTitle = "Loading Adam Hub",
+    LoadingSubtitle = "Please wait...",
     ConfigurationSaving = {
         Enabled = true,
-        FolderName = "AdamHub", -- Custom folder name
+        FolderName = "AdamHub", -- Custom folder name for saving
         FileName = "AdamHubConfig"
     },
     Discord = {
         Enabled = false,
-        Invite = "", -- Discord invite code
-        RememberJoins = true
+        Invite = "", -- No Discord invite
+        RememberJoins = false -- Don't remember joins
     },
-    KeySystem = true,
+    KeySystem = true, -- Use key system
     KeySettings = {
-        Title = "Adam Hub",
-        Subtitle = "Key System",
-        Note = "Enter the key to access Adam Hub",
+        Title = "Adam Hub Key System",
+        Subtitle = "Please enter the key",
+        Note = "Join the Discord for the key",
         FileName = "AdamHubKey",
         SaveKey = true,
         GrabKeyFromSite = false,
@@ -41,175 +28,307 @@ local Window = Rayfield:CreateWindow({
     }
 })
 
--- Create Tabs
-local ScriptTab = Window:CreateTab("Scripts", 4483362458)
-local UtilityTab = Window:CreateTab("Utilities", 4483362458)
-local ThemeTab = Window:CreateTab("Theme", 4483362458)
-local InfoTab = Window:CreateTab("Info", 4483362458)
+-- Create Scripts Tab
+local ScriptsTab = Window:CreateTab("Scripts", 4483362458) -- Tab for scripts
 
--- Script URLs
+-- Create Section for the scripts
+local ScriptsSection = ScriptsTab:CreateSection("Execute Scripts")
+
+-- Define URLs for scripts
 local aimbotScriptURL = "https://raw.githubusercontent.com/isadaam/Universal-Hub/main/roblox.lua"
 local trollScriptURLs = {
     "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
     "https://raw.githubusercontent.com/isadaam/Universal-Hub/main/fling.lua"
 }
+local fpsScriptURLs = "https://raw.githubusercontent.com/isadaam/Universal-Hub/main/fpsbooster.lua"
 
--- Script Section
-local ScriptSection = ScriptTab:CreateSection("Script Execution", false)
-
-ScriptSection:CreateButton({
+-- Aimbot Script Button
+ScriptsTab:CreateButton({
     Name = "Execute Aimbot Script",
-    Info = "Execute the aimbot script from the provided URL",
+    Info = "Executes the Aimbot script from the provided URL",
     Callback = function()
-        local success, result = pcall(function()
-            return loadstring(game:HttpGet(aimbotScriptURL))()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet(aimbotScriptURL))()
         end)
         if success then
             Rayfield:Notify({
                 Title = "Success",
-                Content = "Successfully executed Aimbot script!",
+                Content = "Successfully executed Aimbot Script",
                 Duration = 5,
                 Image = 4483362458,
                 Actions = {
                     Okay = {
-                        Name = "Okay!",
+                        Name = "Okay",
                         Callback = function()
-                            print("Aimbot script executed.")
+                            print("User acknowledged the success notification")
                         end
                     }
                 }
             })
         else
-            warn("Failed to execute Aimbot script:", result)
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Failed to execute Aimbot Script: " .. err,
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("User acknowledged the error notification")
+                        end
+                    }
+                }
+            })
         end
     end
 })
 
-ScriptSection:CreateButton({
-    Name = "Execute Troll Script",
-    Info = "Execute the troll scripts from the provided URLs",
+-- Troll Script Button
+ScriptsTab:CreateButton({
+    Name = "Execute Troll Scripts",
+    Info = "Executes the Troll scripts from the provided URLs",
     Callback = function()
         for _, url in ipairs(trollScriptURLs) do
-            local success, result = pcall(function()
-                return loadstring(game:HttpGet(url))()
+            local success, err = pcall(function()
+                loadstring(game:HttpGet(url))()
             end)
             if success then
                 Rayfield:Notify({
                     Title = "Success",
-                    Content = "Successfully executed Troll script from " .. url,
+                    Content = "Successfully executed Troll Script from URL: " .. url,
                     Duration = 5,
                     Image = 4483362458,
                     Actions = {
                         Okay = {
-                            Name = "Okay!",
+                            Name = "Okay",
                             Callback = function()
-                                print("Troll script executed from " .. url)
+                                print("User acknowledged the success notification")
                             end
                         }
                     }
                 })
             else
-                warn("Failed to execute Troll script from " .. url, result)
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Failed to execute Troll Script from URL: " .. url .. "\nError: " .. err,
+                    Duration = 5,
+                    Image = 4483362458,
+                    Actions = {
+                        Okay = {
+                            Name = "Okay",
+                            Callback = function()
+                                print("User acknowledged the error notification")
+                            end
+                        }
+                    }
+                })
             end
         end
     end
 })
 
--- Utility Section
-local UtilitySection = UtilityTab:CreateSection("Utilities", false)
-
-UtilitySection:CreateButton({
-    Name = "Reset Character",
-    Info = "Reset your character in the game",
+-- Troll Script Button
+ScriptsTab:CreateButton({
+    Name = "Execute FPS Booster Scripts",
+    Info = "Executes the FPS booster scripts from the provided URLs",
     Callback = function()
-        game.Players.LocalPlayer.Character:BreakJoints()
-    end
-})
-
-UtilitySection:CreateButton({
-    Name = "Teleport to Spawn",
-    Info = "Teleport your character to the spawn location",
-    Callback = function()
-        local player = game.Players.LocalPlayer
-        if player.Character then
-            player.Character:SetPrimaryPartCFrame(CFrame.new(workspace.SpawnLocation.Position))
+        for _, url in ipairs(fpsScriptURLs) do
+            local success, err = pcall(function()
+                loadstring(game:HttpGet(url))()
+            end)
+            if success then
+                Rayfield:Notify({
+                    Title = "Success",
+                    Content = "Successfully executed FPS booster Script from URL: " .. url,
+                    Duration = 5,
+                    Image = 4483362458,
+                    Actions = {
+                        Okay = {
+                            Name = "Okay",
+                            Callback = function()
+                                print("User acknowledged the success notification")
+                            end
+                        }
+                    }
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Failed to execute FpsBooster Script from URL: " .. url .. "\nError: " .. err,
+                    Duration = 5,
+                    Image = 4483362458,
+                    Actions = {
+                        Okay = {
+                            Name = "Okay",
+                            Callback = function()
+                                print("User acknowledged the error notification")
+                            end
+                        }
+                    }
+                })
+            end
         end
     end
 })
 
-UtilitySection:CreateSlider({
-    Name = "Walk Speed",
+-- Create Utility Tab
+local UtilityTab = Window:CreateTab("Utility", 4483362458) -- Tab for utility features
+
+-- Create Section for WalkSpeed and JumpPower
+local MovementSection = UtilityTab:CreateSection("Movement Settings")
+
+-- WalkSpeed Slider
+UtilityTab:CreateSlider({
+    Name = "WalkSpeed",
     Info = "Adjust your character's walk speed",
-    Range = {16, 100},
+    Range = {16, 300},
     Increment = 1,
-    Suffix = "Walk Speed",
+    Suffix = "WalkSpeed",
     CurrentValue = 16,
-    Callback = function(value)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+    Flag = "WalkSpeed",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
     end
 })
 
-UtilitySection:CreateSlider({
-    Name = "Jump Power",
+-- JumpPower Slider
+UtilityTab:CreateSlider({
+    Name = "JumpPower",
     Info = "Adjust your character's jump power",
-    Range = {50, 200},
+    Range = {50, 300},
     Increment = 1,
-    Suffix = "Jump Power",
+    Suffix = "JumpPower",
     CurrentValue = 50,
-    Callback = function(value)
-        game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
+    Flag = "JumpPower",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
     end
 })
 
--- Theme Section
-local ThemeSection = ThemeTab:CreateSection("Customize Theme", false)
+-- Create Section for Fly
+local FlySection = UtilityTab:CreateSection("Fly Settings")
 
-local themes = {
-    Background = Color3.fromRGB(24, 24, 24),
-    Glow = Color3.fromRGB(0, 120, 215),
-    Accent = Color3.fromRGB(40, 40, 40),
-    LightContrast = Color3.fromRGB(60, 60, 60),
-    DarkContrast = Color3.fromRGB(20, 20, 20),
-    TextColor = Color3.fromRGB(255, 255, 255)
-}
+-- Fly Functionality
+local flying = false
+local flySpeed = 50
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
 
-for theme, color in pairs(themes) do
-    ThemeSection:CreateColorPicker({
-        Name = theme,
-        Color = color,
-        Callback = function(color3)
-            Rayfield:SetTheme(theme, color3)
-        end
-    })
+local function startFly()
+    if not humanoid then return end
+    local bodyGyro = Instance.new("BodyGyro", humanoid)
+    bodyGyro.P = 9e4
+    bodyGyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+    bodyGyro.cframe = humanoid.CFrame
+
+    local bodyVelocity = Instance.new("BodyVelocity", humanoid)
+    bodyVelocity.velocity = Vector3.new(0, 0, 0)
+    bodyVelocity.maxForce = Vector3.new(9e9, 9e9, 9e9)
+
+    humanoid.PlatformStand = true
+    flying = true
+
+    while flying do
+        bodyVelocity.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * flySpeed) + Vector3.new(0, flySpeed, 0))
+        bodyGyro.cframe = workspace.CurrentCamera.CoordinateFrame
+        wait()
+    end
+
+    bodyGyro:Destroy()
+    bodyVelocity:Destroy()
+    humanoid.PlatformStand = false
 end
 
--- Info Section
-local InfoSection = InfoTab:CreateSection("Information", false)
+local function stopFly()
+    flying = false
+end
 
-InfoSection:CreateLabel("Welcome to Adam Hub!")
-InfoSection:CreateLabel("This GUI allows you to execute various scripts and customize settings.")
-InfoSection:CreateParagraph({Title = "Instructions", Content = "Use the tabs to navigate between different sections and customize your experience."})
-InfoSection:CreateButton({
-    Name = "Join Discord",
-    Info = "Join our community Discord server",
+-- Fly Button
+UtilityTab:CreateButton({
+    Name = "Toggle Fly",
+    Info = "Enable or disable fly mode",
     Callback = function()
-        setclipboard("https://discord.gg/sirius")
-        Rayfield:Notify({
-            Title = "Discord Invite",
-            Content = "Discord invite link copied to clipboard!",
-            Duration = 5,
-            Image = 4483362458,
-            Actions = {
-                Okay = {
-                    Name = "Okay!",
-                    Callback = function()
-                        print("Discord invite link copied.")
-                    end
+        if flying then
+            stopFly()
+            Rayfield:Notify({
+                Title = "Fly Disabled",
+                Content = "You have disabled fly mode",
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("Fly mode disabled")
+                        end
+                    }
                 }
-            }
-        })
+            })
+        else
+            startFly()
+            Rayfield:Notify({
+                Title = "Fly Enabled",
+                Content = "You have enabled fly mode",
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("Fly mode enabled")
+                        end
+                    }
+                }
+            })
+        end
     end
 })
 
--- Load Configuration
+-- Fly Keybind
+UtilityTab:CreateKeybind({
+    Name = "Toggle Fly (Keybind)",
+    CurrentKeybind = "F",
+    HoldToInteract = false,
+    Flag = "FlyKeybind",
+    Callback = function()
+        if flying then
+            stopFly()
+            Rayfield:Notify({
+                Title = "Fly Disabled",
+                Content = "You have disabled fly mode",
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("Fly mode disabled")
+                        end
+                    }
+                }
+            })
+        else
+            startFly()
+            Rayfield:Notify({
+                Title = "Fly Enabled",
+                Content = "You have enabled fly mode",
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("Fly mode enabled")
+                        end
+                    }
+                }
+            })
+        end
+    end
+})
+
+-- Load the configuration at the end
 Rayfield:LoadConfiguration()
+print("make by adam")
