@@ -20,7 +20,7 @@ local Window = Rayfield:CreateWindow({
     KeySettings = {
         Title = "Adam Hub Key System",
         Subtitle = "Please enter the key",
-        Note = "Join the Discord for the key",
+        Note = "Dm isadaam on discord for the key",
         FileName = "AdamHubKey",
         SaveKey = true,
         GrabKeyFromSite = false,
@@ -40,7 +40,9 @@ local trollScriptURLs = {
     "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
     "https://raw.githubusercontent.com/isadaam/Universal-Hub/main/fling.lua"
 }
-local fpsScriptURLs = "https://raw.githubusercontent.com/isadaam/Universal-Hub/main/fpsbooster.lua"
+local fpsBoosterScriptURL = "https://raw.githubusercontent.com/isadaam/Universal-Hub/main/fpsbooster.lua"
+local goodHubScriptURL = "https://shz.al/~mobile-hub"
+local skyHubScriptURL = "https://raw.githubusercontent.com/yofriendfromschool1/Sky-Hub/main/SkyHub.txt"
 
 -- Aimbot Script Button
 ScriptsTab:CreateButton({
@@ -128,46 +130,128 @@ ScriptsTab:CreateButton({
     end
 })
 
--- Troll Script Button
+-- FPS Booster Script Button
 ScriptsTab:CreateButton({
-    Name = "Execute FPS Booster Scripts",
-    Info = "Executes the FPS booster scripts from the provided URLs",
+    Name = "Execute FPS Booster Script",
+    Info = "Executes the FPS Booster script from the provided URL",
     Callback = function()
-        for _, url in ipairs(fpsScriptURLs) do
-            local success, err = pcall(function()
-                loadstring(game:HttpGet(url))()
-            end)
-            if success then
-                Rayfield:Notify({
-                    Title = "Success",
-                    Content = "Successfully executed FPS booster Script from URL: " .. url,
-                    Duration = 5,
-                    Image = 4483362458,
-                    Actions = {
-                        Okay = {
-                            Name = "Okay",
-                            Callback = function()
-                                print("User acknowledged the success notification")
-                            end
-                        }
+        local success, err = pcall(function()
+            loadstring(game:HttpGet(fpsBoosterScriptURL))()
+        end)
+        if success then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "Successfully executed FPS Booster Script",
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("User acknowledged the success notification")
+                        end
                     }
-                })
-            else
-                Rayfield:Notify({
-                    Title = "Error",
-                    Content = "Failed to execute FpsBooster Script from URL: " .. url .. "\nError: " .. err,
-                    Duration = 5,
-                    Image = 4483362458,
-                    Actions = {
-                        Okay = {
-                            Name = "Okay",
-                            Callback = function()
-                                print("User acknowledged the error notification")
-                            end
-                        }
+                }
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Failed to execute FPS Booster Script: " .. err,
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("User acknowledged the error notification")
+                        end
                     }
-                })
-            end
+                }
+            })
+        end
+    end
+})
+
+-- Good Hub Script Button
+ScriptsTab:CreateButton({
+    Name = "Execute Good Hub Script",
+    Info = "Executes the Good Hub script from the provided URL",
+    Callback = function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet(goodHubScriptURL))()
+        end)
+        if success then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "Successfully executed Good Hub Script",
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("User acknowledged the success notification")
+                        end
+                    }
+                }
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Failed to execute Good Hub Script: " .. err,
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("User acknowledged the error notification")
+                        end
+                    }
+                }
+            })
+        end
+    end
+})
+
+-- SkyHub Script Button
+ScriptsTab:CreateButton({
+    Name = "Execute SkyHub Script",
+    Info = "Executes the SkyHub script from the provided URL",
+    Callback = function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet(skyHubScriptURL))()
+        end)
+        if success then
+            Rayfield:Notify({
+                Title = "Success",
+                Content = "Successfully executed SkyHub Script",
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("User acknowledged the success notification")
+                        end
+                    }
+                }
+            })
+        else
+            Rayfield:Notify({
+                Title = "Error",
+                Content = "Failed to execute SkyHub Script: " .. err,
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("User acknowledged the error notification")
+                        end
+                    }
+                }
+            })
         end
     end
 })
@@ -206,78 +290,76 @@ UtilityTab:CreateSlider({
     end
 })
 
--- Create Section for Fly
-local FlySection = UtilityTab:CreateSection("Fly Settings")
+-- Create Section for NoClip
+local NoClipSection = UtilityTab:CreateSection("NoClip Settings")
 
--- Fly Functionality
-local flying = false
-local flySpeed = 50
+-- NoClip Functionality
+local noclip = false
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
-local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
 
-local function startFly()
-    if not humanoid then return end
-    local bodyGyro = Instance.new("BodyGyro", humanoid)
-    bodyGyro.P = 9e4
-    bodyGyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
-    bodyGyro.cframe = humanoid.CFrame
-
-    local bodyVelocity = Instance.new("BodyVelocity", humanoid)
-    bodyVelocity.velocity = Vector3.new(0, 0, 0)
-    bodyVelocity.maxForce = Vector3.new(9e9, 9e9, 9e9)
-
-    humanoid.PlatformStand = true
-    flying = true
-
-    while flying do
-        bodyVelocity.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * flySpeed) + Vector3.new(0, flySpeed, 0))
-        bodyGyro.cframe = workspace.CurrentCamera.CoordinateFrame
-        wait()
+local function startNoClip()
+    noclip = true
+    local character = player.Character or player.CharacterAdded:Wait()
+    for _, v in pairs(character:GetDescendants()) do
+        if v:IsA("BasePart") and v.CanCollide then
+            v.CanCollide = false
+        end
     end
-
-    bodyGyro:Destroy()
-    bodyVelocity:Destroy()
-    humanoid.PlatformStand = false
+    game:GetService("RunService").Stepped:Connect(function()
+        if noclip then
+            for _, v in pairs(character:GetDescendants()) do
+                if v:IsA("BasePart") and v.CanCollide then
+                    v.CanCollide = false
+                end
+            end
+        end
+    end)
 end
 
-local function stopFly()
-    flying = false
+local function stopNoClip()
+    noclip = false
+    local character = player.Character or player.CharacterAdded:Wait()
+    for _, v in pairs(character:GetDescendants()) do
+        if v:IsA("BasePart") and not v.CanCollide then
+            v.CanCollide = true
+        end
+    end
 end
 
--- Fly Button
+-- NoClip Button
 UtilityTab:CreateButton({
-    Name = "Toggle Fly",
-    Info = "Enable or disable fly mode",
+    Name = "Toggle NoClip",
+    Info = "Enable or disable NoClip mode",
     Callback = function()
-        if flying then
-            stopFly()
+        if noclip then
+            stopNoClip()
             Rayfield:Notify({
-                Title = "Fly Disabled",
-                Content = "You have disabled fly mode",
+                Title = "NoClip Disabled",
+                Content = "You have disabled NoClip mode",
                 Duration = 5,
                 Image = 4483362458,
                 Actions = {
                     Okay = {
                         Name = "Okay",
                         Callback = function()
-                            print("Fly mode disabled")
+                            print("NoClip mode disabled")
                         end
                     }
                 }
             })
         else
-            startFly()
+            startNoClip()
             Rayfield:Notify({
-                Title = "Fly Enabled",
-                Content = "You have enabled fly mode",
+                Title = "NoClip Enabled",
+                Content = "You have enabled NoClip mode",
                 Duration = 5,
                 Image = 4483362458,
                 Actions = {
                     Okay = {
                         Name = "Okay",
                         Callback = function()
-                            print("Fly mode enabled")
+                            print("NoClip mode enabled")
                         end
                     }
                 }
@@ -286,49 +368,114 @@ UtilityTab:CreateButton({
     end
 })
 
--- Fly Keybind
+-- NoClip Keybind
 UtilityTab:CreateKeybind({
-    Name = "Toggle Fly (Keybind)",
-    CurrentKeybind = "F",
+    Name = "Toggle NoClip (Keybind)",
+    CurrentKeybind = "N",
     HoldToInteract = false,
-    Flag = "FlyKeybind",
+    Flag = "NoClipKeybind",
     Callback = function()
-        if flying then
-            stopFly()
+        if noclip then
+            stopNoClip()
             Rayfield:Notify({
-                Title = "Fly Disabled",
-                Content = "You have disabled fly mode",
+                Title = "NoClip Disabled",
+                Content = "You have disabled NoClip mode",
                 Duration = 5,
                 Image = 4483362458,
                 Actions = {
                     Okay = {
                         Name = "Okay",
                         Callback = function()
-                            print("Fly mode disabled")
+                            print("NoClip mode disabled")
                         end
                     }
                 }
             })
         else
-            startFly()
+            startNoClip()
             Rayfield:Notify({
-                Title = "Fly Enabled",
-                Content = "You have enabled fly mode",
+                Title = "NoClip Enabled",
+                Content = "You have enabled NoClip mode",
                 Duration = 5,
                 Image = 4483362458,
                 Actions = {
                     Okay = {
                         Name = "Okay",
                         Callback = function()
-                            print("Fly mode enabled")
+                            print("NoClip mode enabled")
                         end
                     }
                 }
             })
         end
+    end
+})
+
+-- Create Section for Utility Features
+local UtilityFeaturesSection = UtilityTab:CreateSection("Utility Features")
+
+-- Rejoin Button
+UtilityTab:CreateButton({
+    Name = "Rejoin",
+    Info = "Rejoin the current game",
+    Callback = function()
+        local ts = game:GetService("TeleportService")
+        local p = game:GetService("Players").LocalPlayer
+        ts:Teleport(game.PlaceId, p)
+    end
+})
+
+-- Teleport to Player
+UtilityTab:CreateInput({
+    Name = "Teleport to Player",
+    PlaceholderText = "Enter player name",
+    Flag = "TeleportPlayerInput",
+    Callback = function(playerName)
+        local targetPlayer = game.Players:FindFirstChild(playerName)
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            player.Character:MoveTo(targetPlayer.Character.HumanoidRootPart.Position)
+            Rayfield:Notify({
+                Title = "Teleport Success",
+                Content = "Teleported to " .. playerName,
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("User acknowledged the success notification")
+                        end
+                    }
+                }
+            })
+        else
+            Rayfield:Notify({
+                Title = "Teleport Failed",
+                Content = "Player not found or not accessible",
+                Duration = 5,
+                Image = 4483362458,
+                Actions = {
+                    Okay = {
+                        Name = "Okay",
+                        Callback = function()
+                            print("User acknowledged the failure notification")
+                        end
+                    }
+                }
+            })
+        end
+    end
+})
+
+-- Destroy GUI Button
+UtilityTab:CreateButton({
+    Name = "Destroy GUI",
+    Info = "Destroy the entire GUI",
+    Callback = function()
+        Rayfield:Destroy()
     end
 })
 
 -- Load the configuration at the end
 Rayfield:LoadConfiguration()
-print("make by adam")
+print("Make by Adam good luck to skidder!")
